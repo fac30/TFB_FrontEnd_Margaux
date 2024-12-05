@@ -1,7 +1,17 @@
 import React, { useState } from "react";
 import CategoryMenu from "./CategoryMenu";
 import Canvas from "./Canvas";
-import { Button } from "native-base";
+import { 
+  Button, 
+  Box, 
+  Heading, 
+  VStack, 
+  Modal, 
+  Text, 
+  Flex, 
+  Image,
+  Alert 
+} from "native-base";
 
 // Define a type for saved outfits
 interface SavedOutfit {
@@ -83,117 +93,91 @@ export default function OutfitMakerComponent() {
   };
 
   return (
-    <div style={{ padding: "20px" }}>
-      <h1 style={{ textAlign: "center" }}>Outfit Maker</h1>
+    <Box 
+      w="100%" 
+      maxW="100vw" 
+      overflow="hidden"
+      px={2} // reduced padding for mobile
+    >
+      <Heading textAlign="center" mb={4} fontSize={{ base: "xl", md: "2xl" }}>Outfit Maker</Heading>
 
-{/* Button to toggle between Create Outfit and Saved Outfits views */}
-
-<Button
-onPress={toggleSavedOutfitsView}
-bgColor="primary.500"
-size="lg"
-_text={{ color: "black" }}
-mb={4}
->
-{showSavedOutfits ? "Back to Outfit Creation" : "View Saved Outfits"}
-</Button>
-
-{/* Show Saved Outfits Gallery if toggled */}
+      <Button
+        onPress={toggleSavedOutfitsView}
+        colorScheme="primary"
+        size="lg"
+        mb={4}
+      >
+        {showSavedOutfits ? "Back to Outfit Creation" : "View Saved Outfits"}
+      </Button>
 
       {showSavedOutfits ? (
-        <div style={{ display: "flex", flexWrap: "wrap", gap: "20px" }}>
+        <Flex 
+          direction="row" 
+          wrap="wrap" 
+          gap={2} // reduced gap for mobile
+          w="100%"
+          justify="center"
+        >
           {savedOutfits.map((outfit) => (
-            <div
+            <Box
               key={outfit.id}
-              style={{
-                width: "100px",
-                textAlign: "center",
-                cursor: "pointer",
-                border: "1px solid #ddd",
-                padding: "10px",
-              }}
-              onClick={() => setModalOutfit(outfit)} // Open modal on click
+              borderWidth={1}
+              borderColor="gray.200"
+              borderRadius="md"
+              p={2}
+              w={{ base: "80px", md: "100px" }} // smaller on mobile
+              alignItems="center"
+              onPress={() => setModalOutfit(outfit)}
             >
-              <img
-                src={outfit.items[0]?.image} // Show first item as preview (you can modify this)
+              <Image
+                source={{ uri: outfit.items[0]?.image }}
                 alt={outfit.items[0]?.name}
-                style={{ width: "80px", height: "80px", objectFit: "cover" }}
+                size={{ base: "60px", md: "80px" }} // smaller on mobile
               />
-              <p>{outfit.items.length} items</p>
-            </div>
+              <Text fontSize="xs" mt={1}>{outfit.items.length} items</Text>
+            </Box>
           ))}
 
-          {/* Modal */}
-          {modalOutfit && (
-            <div
-              style={{
-                position: "fixed",
-                top: "0",
-                left: "0",
-                width: "100vw",
-                height: "100vh",
-                backgroundColor: "rgba(0, 0, 0, 0.5)",
-                display: "flex",
-                justifyContent: "center",
-                alignItems: "center",
-                zIndex: 1000,
-              }}
-              onClick={() => setModalOutfit(null)} // Close modal on overlay click
-            >
-              <div
-                style={{
-                  backgroundColor: "#fff",
-                  padding: "20px",
-                  borderRadius: "5px",
-                  boxShadow: "0 0 10px rgba(0, 0, 0, 0.3)",
-                  maxWidth: "400px",
-                  maxHeight: "80%",
-                  overflowY: "auto",
-                }}
-                onClick={(e) => e.stopPropagation()} // Prevent modal close on content click
-              >
-                <h2>Outfit Details</h2>
-                {modalOutfit.items.map((item, index) => (
-                  <div key={index} style={{ marginBottom: "10px" }}>
-                    <img
-                      src={item.image}
-                      alt={item.name}
-                      style={{ width: "50px", height: "50px", objectFit: "cover" }}
-                    />
-                    <p>{item.name}</p>
-                  </div>
-                ))}
-
-                {/* Close modal button */}
-
-                <Button
-                onPress={() => setModalOutfit(null)} // Close modal button
-                bgColor="primary.500"
-                size="lg"
-                _text={{ color: "black" }}
-                mb={4}
-                >
-                  Close
-                </Button>
-
-              </div>
-            </div>
-          )}
-        </div>
+          <Modal isOpen={!!modalOutfit} onClose={() => setModalOutfit(null)}>
+            <Modal.Content maxW="400px">
+              <Modal.CloseButton />
+              <Modal.Header>Outfit Details</Modal.Header>
+              <Modal.Body>
+                <VStack space={3}>
+                  {modalOutfit?.items.map((item, index) => (
+                    <Flex key={index} direction="row" alignItems="center">
+                      <Image
+                        source={{ uri: item.image }}
+                        alt={item.name}
+                        size="50px"
+                        mr={2}
+                      />
+                      <Text>{item.name}</Text>
+                    </Flex>
+                  ))}
+                </VStack>
+              </Modal.Body>
+              <Modal.Footer>
+                <Button onPress={() => setModalOutfit(null)}>Close</Button>
+              </Modal.Footer>
+            </Modal.Content>
+          </Modal>
+        </Flex>
       ) : (
-        <>
-          {/* Button to create a new outfit */}
+        <VStack 
+          space={4} 
+          w="100%" 
+          alignItems="center"
+        >
           <Button
-          onPress={toggleMenu}
-          bgColor="primary.500" 
-          size="lg"
-          _text={{ color: "black" }}
-          mb={4}
+            onPress={toggleMenu}
+            colorScheme="primary"
+            size="lg"
+            w={{ base: "full", md: "auto" }} // full width on mobile
           >
             + Create Your Outfit
           </Button>
 
-          {/* Show the category menu when toggled */}
           {showMenu && (
             <CategoryMenu
               selectedCategory={selectedCategory}
@@ -205,33 +189,29 @@ mb={4}
             />
           )}
 
-          {/* Canvas to display selected items */}
           <Canvas
             items={selectedItems}
             onDeleteItem={handleDeleteItem}
             onUpdateItemPosition={handleUpdateItemPosition}
           />
 
-          {/* Button to save the outfit */}
-
           <Button
-          onPress={handleSaveOutfit}
-          bgColor="primary.500"
-          size="lg"
-          _text={{ color: "black" }}
-          mb={4}
+            onPress={handleSaveOutfit}
+            colorScheme="primary"
+            size="lg"
+            w={{ base: "full", md: "auto" }} // full width on mobile
           >
             Save Outfit
           </Button>
 
-          {/* Confirmation message */}
           {saveConfirmation && (
-            <p style={{ textAlign: "center", color: "green", marginTop: "10px" }}>
-              Outfit saved successfully!
-            </p>
+            <Alert status="success" w="100%">
+              <Alert.Icon />
+              <Alert.Title>Outfit saved successfully!</Alert.Title>
+            </Alert>
           )}
-        </>
+        </VStack>
       )}
-    </div>
+    </Box>
   );
 }
