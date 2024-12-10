@@ -1,4 +1,5 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
+import './Canvas.css'; // Import the CSS file
 
 interface CanvasProps {
   items: { name: string; image: string; x: number; y: number }[];
@@ -26,37 +27,30 @@ const Canvas: React.FC<CanvasProps> = ({ items, onDeleteItem, onUpdateItemPositi
     e.preventDefault();
   };
 
-  // Handle the dragging movement
-  const handleDragMove = (e: MouseEvent | TouchEvent) => {
-    if (draggingItemIndex !== null) {
-      const clientX = 'touches' in e ? e.touches[0].clientX : e.clientX;
-      const clientY = 'touches' in e ? e.touches[0].clientY : e.clientY;
-
-      const newX = clientX - offset.x;
-      const newY = clientY - offset.y;
-
-      // Update the item position while dragging
-      onUpdateItemPosition(draggingItemIndex, newX, newY);
-    }
-  };
-
-  // Handle the end of the drag
-  const handleDragEnd = () => {
-    setDraggingItemIndex(null); // Stop dragging
-  };
-
   // Attach mouse and touch event listeners
-  React.useEffect(() => {
+  useEffect(() => {
+    const handleDragMove = (e: MouseEvent | TouchEvent) => {
+      if (draggingItemIndex !== null) {
+        const clientX = 'touches' in e ? e.touches[0].clientX : e.clientX;
+        const clientY = 'touches' in e ? e.touches[0].clientY : e.clientY;
+
+        const newX = clientX - offset.x;
+        const newY = clientY - offset.y;
+
+        // Update the item position while dragging
+        onUpdateItemPosition(draggingItemIndex, newX, newY);
+      }
+    };
+
+    const handleDragEnd = () => {
+      setDraggingItemIndex(null); // Stop dragging
+    };
+
     if (draggingItemIndex !== null) {
       document.addEventListener("mousemove", handleDragMove);
       document.addEventListener("mouseup", handleDragEnd);
       document.addEventListener("touchmove", handleDragMove, { passive: false });
       document.addEventListener("touchend", handleDragEnd);
-    } else {
-      document.removeEventListener("mousemove", handleDragMove);
-      document.removeEventListener("mouseup", handleDragEnd);
-      document.removeEventListener("touchmove", handleDragMove);
-      document.removeEventListener("touchend", handleDragEnd);
     }
 
     return () => {
@@ -65,7 +59,7 @@ const Canvas: React.FC<CanvasProps> = ({ items, onDeleteItem, onUpdateItemPositi
       document.removeEventListener("touchmove", handleDragMove);
       document.removeEventListener("touchend", handleDragEnd);
     };
-  }, [draggingItemIndex, offset]);
+  }, [draggingItemIndex, offset, onUpdateItemPosition]);
 
   // Handle item deletion on mouse or touch events
   const handleDeleteItem = (index: number, e: React.MouseEvent | React.TouchEvent) => {
@@ -74,27 +68,14 @@ const Canvas: React.FC<CanvasProps> = ({ items, onDeleteItem, onUpdateItemPositi
   };
 
   return (
-    <div
-      className="canvas-container"
-      style={{
-        width: "450px", // Fixed width
-        height: "350px", // Fixed height
-        border: "1px solid #ddd", // Optional for clarity
-        overflow: "hidden", // Prevent items from overflowing
-        position: "relative", // Allows absolute positioning of items
-        marginTop: "20px", // Some spacing for clarity
-        background: "url('/images/grid-lines.png')", // Add grid lines image to the background
-        backgroundSize: "20px 20px", // Adjust size of grid cells
-      }}
-    >
+    <div className="canvas-container">
       {items.map((item, index) => (
         <div
           key={index}
+          className="item"
           style={{
-            position: "absolute",
             top: `${item.y}px`, // Item's vertical position
             left: `${item.x}px`, // Item's horizontal position
-            cursor: "pointer",
           }}
           onMouseDown={(e) => handleDragStart(index, e)} // Start dragging with mouse
           onTouchStart={(e) => handleDragStart(index, e)} // Start dragging with touch
@@ -102,33 +83,15 @@ const Canvas: React.FC<CanvasProps> = ({ items, onDeleteItem, onUpdateItemPositi
           <img
             src={item.image}
             alt={item.name}
-            style={{
-              width: "50px", // Fixed width for each item
-              height: "50px", // Fixed height for each item
-              objectFit: "cover", // Keep aspect ratio for images
-            }}
+            className="item-image" // Use CSS class for image
           />
-          <p style={{ textAlign: "center", fontSize: "12px" }}>{item.name}</p>
+          <p className="item-name">{item.name}</p>
 
           {/* Add delete button for each item */}
           <button
             onClick={(e) => handleDeleteItem(index, e)}
             onTouchStart={(e) => handleDeleteItem(index, e)} // Handle touch events for delete
-            style={{
-              position: "absolute",
-              top: "-10px",
-              right: "-10px",
-              backgroundColor: "red",
-              color: "#fff",
-              border: "none",
-              borderRadius: "50%",
-              width: "20px",
-              height: "20px",
-              display: "flex",
-              justifyContent: "center",
-              alignItems: "center",
-              cursor: "pointer",
-            }}
+            className="delete-button" // Use CSS class for delete button
           >
             X
           </button>

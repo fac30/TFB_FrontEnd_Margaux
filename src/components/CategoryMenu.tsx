@@ -1,11 +1,11 @@
 import React from "react";
+import './CategoryMenu.css';
 
 interface CategoryMenuProps {
   selectedCategory: string | null;
   selectedSubCategory: string | null;
   onCategorySelect: (category: string) => void;
   onBackToCategories: () => void;
-  onItemSelect: (item: { name: string; image: string }) => void;
   setSelectedSubCategory: (subCategory: string | null) => void;
 }
 
@@ -50,17 +50,16 @@ const CategoryMenu: React.FC<CategoryMenuProps> = ({
   selectedSubCategory,
   onCategorySelect,
   onBackToCategories,
-  onItemSelect,
   setSelectedSubCategory,
 }) => {
   const renderMainCategories = () => (
-    <div>
+    <div className="category-menu">
       <h2>Select a Category</h2>
-      <ul style={{ listStyle: "none", padding: 0 }}>
+      <ul>
         {Object.keys(categories).map((category) => (
           <li key={category}>
             <button
-              style={{ margin: "10px", padding: "10px", cursor: "pointer" }}
+              className="menu-item"
               onClick={() => onCategorySelect(category)}
             >
               {category}
@@ -72,20 +71,20 @@ const CategoryMenu: React.FC<CategoryMenuProps> = ({
   );
 
   const renderSubCategories = () => (
-    <div>
+    <div className="category-menu">
       <h2>{selectedCategory} Subcategories</h2>
       <button
-        style={{ margin: "10px", padding: "10px", cursor: "pointer" }}
+        className="menu-item"
         onClick={onBackToCategories}
       >
         Back to Categories
       </button>
-      <ul style={{ listStyle: "none", padding: 0 }}>
+      <ul>
         {Object.keys(categories[selectedCategory as "Tops" | "Bottoms" | "Shoes"]).map(
           (subCategory) => (
             <li key={subCategory}>
               <button
-                style={{ margin: "10px", padding: "10px", cursor: "pointer" }}
+                className="menu-item"
                 onClick={() => setSelectedSubCategory(subCategory)}
               >
                 {subCategory}
@@ -98,26 +97,25 @@ const CategoryMenu: React.FC<CategoryMenuProps> = ({
   );
 
   const renderItems = () => (
-    <div>
+    <div className="category-menu">
       <h2>{selectedSubCategory} Items</h2>
       <button
-        style={{ margin: "10px", padding: "10px", cursor: "pointer" }}
+        className="menu-item"
         onClick={() => setSelectedSubCategory(null)}
       >
         Back to {selectedCategory}
       </button>
-      <ul style={{ listStyle: "none", padding: 0, display: "flex", flexWrap: "wrap" }}>
+      <ul style={{ display: "flex", flexWrap: "wrap" }}>
         {categories[selectedCategory as "Tops" | "Bottoms" | "Shoes"][
           selectedSubCategory!
         ].map((item) => (
-          <li key={item.name} style={{ margin: "10px" }}>
+          <li key={item.name} className="menu-item">
             <img
               src={item.image}
               alt={item.name}
-              style={{ width: "100px", height: "100px", objectFit: "cover", cursor: "pointer" }}
-              onClick={() => onItemSelect(item)}
+              className="item-image"
             />
-            <p style={{ textAlign: "center" }}>{item.name}</p>
+            <p className="item-name">{item.name}</p>
           </li>
         ))}
       </ul>
@@ -125,7 +123,7 @@ const CategoryMenu: React.FC<CategoryMenuProps> = ({
   );
 
   return (
-    <div style={{ border: "1px solid #ddd", padding: "20px", borderRadius: "5px" }}>
+    <div className="category-menu">
       {selectedCategory ? (
         selectedSubCategory ? (
           renderItems()

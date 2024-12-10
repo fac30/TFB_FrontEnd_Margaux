@@ -1,0 +1,27 @@
+.category-menu {
+    display: flex;
+    flex-direction: column;
+    padding: 10px;
+}
+
+.menu-item {
+    margin: 5px 0;
+    padding: 10px;
+    background-color: #f0f0f0; /* Example background color */
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+.menu-item:hover {
+    background-color: #e0e0e0; /* Change background on hover */
+}
+
+.item-image {
+    width: 100px; /* Fixed width for images */
+    height: 100px; /* Fixed height for images */
+    object-fit: cover; /* Maintain aspect ratio */
+}
+
+.item-name {
+    text-align: center; /* Center the text */
+} 

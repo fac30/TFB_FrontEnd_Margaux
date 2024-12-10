@@ -1,0 +1,29 @@
+.outfit-maker-container {
+    width: 100%;
+    max-width: 1200px;
+    margin: auto;
+    padding: 10px;
+    background-color: white; /* Background color for the component */
+    border-radius: 5px; /* Rounded corners */
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1); /* Subtle shadow */
+}
+
+.outfit-maker-title {
+    text-align: center;
+    font-size: 24px;
+    margin-bottom: 20px;
+}
+
+.outfit-button {
+    margin: 10px;
+    padding: 10px;
+    cursor: pointer;
+    background-color: #EC5E29; /* Example button color */
+    color: white; /* Button text color */
+    border: none;
+    border-radius: 5px; /* Rounded corners for buttons */
+}
+
+.outfit-button:hover {
+    background-color: #d95b26; /* Darker shade on hover */
+} 
