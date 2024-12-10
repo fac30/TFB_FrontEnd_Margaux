@@ -204,6 +204,8 @@ mb={4}
           </Button>
 
           {/* Show the category menu when toggled */}
+
+
           {showMenu && (
             <CategoryMenu
               selectedCategory={selectedCategory}

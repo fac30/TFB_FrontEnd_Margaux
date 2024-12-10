@@ -103,8 +103,8 @@ const Canvas: React.FC<CanvasProps> = ({ items, onDeleteItem, onUpdateItemPositi
             src={item.image}
             alt={item.name}
             style={{
-              width: "50px", // Fixed width for each item
-              height: "50px", // Fixed height for each item
+              width: "80px", // Fixed width for each item
+              height: "80px", // Fixed height for each item
               objectFit: "cover", // Keep aspect ratio for images
             }}
           />
