@@ -84,14 +84,6 @@ export default function OutfitMakerComponent() {
 
   return (
 
-//   <Box
-//   alignItems="center"
-//   justifyContent="space-between"
-//   flex={1}
-//   margin={4} // Adjust margin to ensure spacing
-//   w="100%" h="100vh" bg="white" safeArea
-// >
-
 <Box 
 
 w="100%" 
@@ -100,7 +92,7 @@ overflow="hidden"
 px={2} // reduced padding for mobile
 >
 
-    <div style={{ padding: "10px", backgroundColor: "white", width: "auto", maxWidth: "1200px", margin: "auto" }}>
+    <div style={{  backgroundColor: "pink", width: "auto", maxWidth: "1200px", margin: "auto" }}>
       
       
 <h1 style={{ textAlign: "center" }}>Outfit Maker</h1>
@@ -244,21 +236,23 @@ mb={4}
           {/* Button to save the outfit */}
 
           <Button
-          onPress={handleSaveOutfit}
-          bgColor="primary.500"
+          onPress={() => {
+            handleSaveOutfit();
+            setSaveConfirmation(true);
+            setTimeout(() => setSaveConfirmation(false), 2000);
+          }}
+
+          bgColor={saveConfirmation ? "green.500" : "primary.500" }
           size="lg"
           _text={{ color: "black" }}
           mb={4}
           >
-            Save Outfit
+          {/* Confirmation message */}
+
+          {saveConfirmation ? "Outfit Saved successfully!" : "Save Outfit"}
           </Button>
 
-          {/* Confirmation message */}
-          {saveConfirmation && (
-            <p style={{ textAlign: "center", color: "green", marginTop: "10px" }}>
-              Outfit saved successfully!
-            </p>
-          )}
+          
         </>
       )}
     </div>
