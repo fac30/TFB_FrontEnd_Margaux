@@ -6,16 +6,28 @@ interface CanvasProps {
   onUpdateItemPosition: (index: number, x: number, y: number) => void;
 }
 
-const Canvas: React.FC<CanvasProps> = ({ items, onDeleteItem, onUpdateItemPosition }) => {
-  const [draggingItemIndex, setDraggingItemIndex] = useState<number | null>(null);
-  const [offset, setOffset] = useState<{ x: number; y: number }>({ x: 0, y: 0 });
+const Canvas: React.FC<CanvasProps> = ({
+  items,
+  onDeleteItem,
+  onUpdateItemPosition,
+}) => {
+  const [draggingItemIndex, setDraggingItemIndex] = useState<number | null>(
+    null
+  );
+  const [offset, setOffset] = useState<{ x: number; y: number }>({
+    x: 0,
+    y: 0,
+  });
 
   // Handle the start of the dragging
-  const handleDragStart = (index: number, e: React.MouseEvent | React.TouchEvent) => {
+  const handleDragStart = (
+    index: number,
+    e: React.MouseEvent | React.TouchEvent
+  ) => {
     setDraggingItemIndex(index);
-    const clientX = 'touches' in e ? e.touches[0].clientX : e.clientX;
-    const clientY = 'touches' in e ? e.touches[0].clientY : e.clientY;
-    
+    const clientX = "touches" in e ? e.touches[0].clientX : e.clientX;
+    const clientY = "touches" in e ? e.touches[0].clientY : e.clientY;
+
     const item = items[index];
     setOffset({
       x: clientX - item.x,
@@ -29,8 +41,8 @@ const Canvas: React.FC<CanvasProps> = ({ items, onDeleteItem, onUpdateItemPositi
   // Handle the dragging movement
   const handleDragMove = (e: MouseEvent | TouchEvent) => {
     if (draggingItemIndex !== null) {
-      const clientX = 'touches' in e ? e.touches[0].clientX : e.clientX;
-      const clientY = 'touches' in e ? e.touches[0].clientY : e.clientY;
+      const clientX = "touches" in e ? e.touches[0].clientX : e.clientX;
+      const clientY = "touches" in e ? e.touches[0].clientY : e.clientY;
 
       const newX = clientX - offset.x;
       const newY = clientY - offset.y;
@@ -50,7 +62,9 @@ const Canvas: React.FC<CanvasProps> = ({ items, onDeleteItem, onUpdateItemPositi
     if (draggingItemIndex !== null) {
       document.addEventListener("mousemove", handleDragMove);
       document.addEventListener("mouseup", handleDragEnd);
-      document.addEventListener("touchmove", handleDragMove, { passive: false });
+      document.addEventListener("touchmove", handleDragMove, {
+        passive: false,
+      });
       document.addEventListener("touchend", handleDragEnd);
     } else {
       document.removeEventListener("mousemove", handleDragMove);
@@ -68,7 +82,10 @@ const Canvas: React.FC<CanvasProps> = ({ items, onDeleteItem, onUpdateItemPositi
   }, [draggingItemIndex, offset]);
 
   // Handle item deletion on mouse or touch events
-  const handleDeleteItem = (index: number, e: React.MouseEvent | React.TouchEvent) => {
+  const handleDeleteItem = (
+    index: number,
+    e: React.MouseEvent | React.TouchEvent
+  ) => {
     e.stopPropagation(); // Prevent the event from bubbling up to the parent component
     onDeleteItem(index); // Call the delete function passed down as a prop
   };
@@ -77,15 +94,30 @@ const Canvas: React.FC<CanvasProps> = ({ items, onDeleteItem, onUpdateItemPositi
     <div
       className="canvas-container"
       style={{
-        width: "450px", // Fixed width
+        width: "100%", // Fixed width
         height: "350px", // Fixed height
         border: "1px solid #ddd", // Optional for clarity
         overflow: "hidden", // Prevent items from overflowing
         position: "relative", // Allows absolute positioning of items
         marginTop: "20px", // Some spacing for clarity
-        background: "url('/images/grid-lines.png')", // Add grid lines image to the background
-        backgroundSize: "20px 20px", // Adjust size of grid cells
+        padding: "0rem",
+        // background: "url('/images/grid-lines.png')", // Add grid lines image to the background
+        // backgroundSize: "20px 20px", // Adjust size of grid cells
       }}
+
+      // className="canvas-container"
+      // style={{
+      //   width: "100%",
+      //   maxWidth: "400px", // Adjust for smaller screens
+      //   height: "auto", // Maintain aspect ratio
+      //   aspectRatio: "4 / 3", // Forces the canvas to always have a fixed aspect ratio
+      //   border: "1px solid #ddd",
+      //   overflow: "hidden",
+      //   position: "relative",
+      //   marginTop: "20px",
+      //   background: "url('/images/grid-lines.png')",
+      //   backgroundSize: "20px 20px",
+      // }}
     >
       {items.map((item, index) => (
         <div
