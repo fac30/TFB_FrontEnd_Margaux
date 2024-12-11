@@ -96,10 +96,10 @@ const Canvas: React.FC<CanvasProps> = ({
       style={{
         width: "100%", // Fixed width
         height: "350px", // Fixed height
-        border: "1px solid #ddd", // Optional for clarity
+        border: "2px solid #ddd", // Optional for clarity
         overflow: "hidden", // Prevent items from overflowing
         position: "relative", // Allows absolute positioning of items
-        marginTop: "20px", // Some spacing for clarity
+        //marginTop: "20px", // Some spacing for clarity
         padding: "0rem",
         // background: "url('/images/grid-lines.png')", // Add grid lines image to the background
         // backgroundSize: "20px 20px", // Adjust size of grid cells

@@ -47,12 +47,37 @@ export default function OutfitMakerComponent() {
       ...prev,
       {
         ...item,
-        x: Math.random() * 390, // Random position for x (within canvas width)
+        x: Math.random() * 150, // Random position for x (within canvas width)
         y: Math.random() * 290, // Random position for y (within canvas height)
       },
     ]);
     setShowMenu(false); // Close menu after item selection (if intended)
   };
+
+  // const handleItemSelect = (item: { name: string; image: string }) => {
+  //   // Dynamically get the canvas dimensions
+  //   const canvas = document.querySelector('.canvas-container') as HTMLElement;
+  //   const canvasWidth = canvas ? canvas.offsetWidth : 0;
+  //   const canvasHeight = canvas ? canvas.offsetHeight : 0;
+  
+  //   const itemWidth = 80; // Approximate item width
+  //   const itemHeight = 80; // Approximate item height
+  
+  //   // Calculate position to center the item
+  //   const x = (canvasWidth - itemWidth) / 2;
+  //   const y = (canvasHeight - itemHeight) / 2;
+  
+  //   setSelectedItems((prev) => [
+  //     ...prev,
+  //     {
+  //       ...item,
+  //       x: Math.max(0, Math.min(canvasWidth - itemWidth, x)), // Ensure it doesn't go out of bounds
+  //       y: Math.max(0, Math.min(canvasHeight - itemHeight, y)), // Ensure it doesn't go out of bounds
+  //     },
+  //   ]);
+  //   setShowMenu(false); // Close menu after item selection
+  // };
+  
 
   // Deletes an item from the canvas
   const handleDeleteItem = (index: number) => {
@@ -248,7 +273,7 @@ export default function OutfitMakerComponent() {
 
                 <Box
                   w="100%"
-                  h="100%" // Maintain space even when hidden
+                  //h="100%" // Maintain space even when hidden
                   style={{
                     display: showMenu ? "none" : "flex",
                     opacity: showMenu ? 0 : 1,
